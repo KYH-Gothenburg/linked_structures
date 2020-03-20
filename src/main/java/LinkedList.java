@@ -22,6 +22,22 @@ class LinkedList<T> {
         tail = node;
     }
 
+    public void insertHead(T data) {
+        // Implement this
+    }
+
+    public boolean isEmpty() {
+        // Returnera sant om listan är tom, annars falskt
+    }
+
+    public int size() {
+        // Returnerar antalet noder i listan
+    }
+
+    public void clear() {
+        // Tömmer listan
+    }
+
     public void print() {
         Node<T> current = head;
 
