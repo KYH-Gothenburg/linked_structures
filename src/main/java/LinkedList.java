@@ -38,6 +38,23 @@ class LinkedList<T> {
         // Tömmer listan
     }
 
+    public boolean find(T data) {
+        // Sant om data finns i listan
+    }
+
+    public T removeTail() {
+        // Ta bort sista noden och returnera dess data
+    }
+
+    public T removeHead() {
+        // Ta bort första noden och returnera dess data
+    }
+
+    public boolean remove(T data) {
+        // Om data finns i listan, ta bort den noden.
+        // Returnera sant om vi hittade något att ta bort annars falskt
+    }
+
     public void print() {
         Node<T> current = head;
 
