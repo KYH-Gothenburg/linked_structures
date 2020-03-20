@@ -1,12 +1,16 @@
 package main.java;
 
-class LinkedList<T> {
+import java.util.Iterator;
+
+class LinkedList<T> implements Iterable<T> {
     private Node<T> head;
     private Node<T> tail;
+    private int count;
 
     public LinkedList() {
         head = null;
         tail = null;
+        count = 0;
     }
 
     public void insertTail(T data) {
@@ -20,47 +24,142 @@ class LinkedList<T> {
             node.setPrev(tail);
         }
         tail = node;
+        count++;
     }
 
     public void insertHead(T data) {
-        // Implement this
+        Node<T> node = new Node<T>(data);
+
+        if (head == null) {
+            tail = node;
+        } else {
+            head.setPrev(node);
+            node.setNext(head);
+        }
+        head = node;
+        count++;
     }
 
     public boolean isEmpty() {
-        // Returnera sant om listan är tom, annars falskt
+        return head == null;
     }
 
     public int size() {
-        // Returnerar antalet noder i listan
+        return count;
     }
 
     public void clear() {
-        // Tömmer listan
-    }
-
-    public boolean find(T data) {
-        // Sant om data finns i listan
-    }
-
-    public T removeTail() {
-        // Ta bort sista noden och returnera dess data
-    }
-
-    public T removeHead() {
-        // Ta bort första noden och returnera dess data
-    }
-
-    public boolean remove(T data) {
-        // Om data finns i listan, ta bort den noden.
-        // Returnera sant om vi hittade något att ta bort annars falskt
-    }
-
-    public void print() {
         Node<T> current = head;
 
         while (current != null) {
-            System.out.println(current.getData());
+            // Mohas lösning, som vi använder
+            Node<T> next = current.getNext();
+            current.setPrev(null);
+            current.setNext(null);
+            current = next;
+
+            // Min krånliga lösning
+            // current.setPrev(null);
+            // current = current.getNext();
+            // if(current != null){
+            // current.getPrev().setNext(null);
+            // }
+        }
+        head = null;
+        tail = null;
+        count = 0;
+    }
+
+    public boolean find(T data) {
+        Node<T> current = head;
+
+        while (current != null) {
+            // Angelas lösning
+            if (current.getData().equals(data)) {
+                return true;
+            }
             current = current.getNext();
         }
+        return false;
     }
+
+    public T removeTail() {
+        // If list is empty
+        if (tail == null) {
+            return null;
+        }
+        // Only one item in list
+        if (tail.getPrev() == null) {
+            T data = tail.getData();
+            tail = null;
+            head = null;
+            count = 0;
+            return data;
+        }
+        Node<T> prev = tail.getPrev();
+        tail.setPrev(null);
+        T data = tail.getData();
+        tail = prev;
+        tail.setNext(null);
+        count--;
+        return data;
+    }
+
+    public T removeHead() {
+        if (head == null) {
+            return null;
+        }
+        if (head.getNext() == null) {
+            T data = head.getData();
+            tail = null;
+            head = null;
+            count = 0;
+            return data;
+        }
+        Node<T> next = head.getNext();
+        head.setNext(null);
+        T data = head.getData();
+        head = next;
+        head.setPrev(null);
+        count--;
+        return data;
+    }
+
+    public boolean remove(T data) {
+        if (head == null) {
+            return false;
+        }
+        Node<T> current = head;
+
+        while (current != null) {
+            // Angelas lösning
+            if (current.getData().equals(data)) {
+                // First node in list
+                if (current == head) {
+                    removeHead();
+                    return true;
+                }
+                // Last node in list
+                if (current == tail) {
+                    removeTail();
+                    return true;
+                }
+
+                current.getPrev().setNext(current.getNext());
+                current.getNext().setPrev(current.getPrev());
+                current.setPrev(null);
+                current.setNext(null);
+                count--;
+                return true;
+            }
+            current = current.getNext();
+        }
+        return false;
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return new ListIterator<>(head);
+    }
+
 }
